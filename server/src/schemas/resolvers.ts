@@ -1,4 +1,4 @@
-import { User } from '../models/index.js';
+import { User } from '../models/User.js';
 import { signToken, AuthenticationError } from '../services/auth.js';
 
 interface AddUserArgs {

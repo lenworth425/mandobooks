@@ -24,7 +24,7 @@ export const authenticateToken = ({ req }: any) => {
   try {
 
     const secretKey: any = process.env.JWT_SECRET_KEY || '';
-    const decoded: any = jwt.verify(token, secretKey, { maxAge: '1h' });
+    const decoded: JwtPayload = jwt.verify(token, secretKey, { maxAge: '1h' }) as JwtPayload;
     req.user = decoded;
     req.user = secretKey;
 

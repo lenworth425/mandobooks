@@ -25,31 +25,40 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-
+  
     try {
-      const {data} = await addUser
-      ({ variables: { ...userFormData } });
-
-      if (!data.addUser) {
-        throw new Error('something went wrong!');
+      const { data } = await addUser({ 
+        variables: { 
+          input: { 
+            username: userFormData.username, 
+            email: userFormData.email, 
+            password: userFormData.password 
+          } 
+        },
+        onError: (error) => {
+          console.error('Full GraphQL Error:', error);
+          console.error('GraphQL Errors:', error.graphQLErrors);
+          console.error('Network Error:', error.networkError);
+        } 
+      });
+  
+      if (data && data.signup) {
+        const { token } = data.signup;
+        Auth.login(token);
+        handleModalClose();
       }
-
-    
-      const { token } = data.addUser;
-      Auth.login(token);
-      handleModalClose();
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
-
+  
     setUserFormData({
       username: '',
       email: '',

@@ -1,9 +1,12 @@
 // use this to decode a token and get the user's information out of it
-import { jwtDecode } from 'jwt-decode';
+import { type JwtPayload, jwtDecode } from 'jwt-decode';
 
-interface UserToken {
-  name: string;
-  exp: number;
+interface ExtendedJwt extends JwtPayload {
+  data:{
+    username:string,
+    email:string,
+    id:string
+  }
 }
 
 // create a new class to instantiate for a user
@@ -23,8 +26,8 @@ class AuthService {
   // check if token is expired
   isTokenExpired(token: string) {
     try {
-      const decoded = jwtDecode<UserToken>(token);
-      if (decoded.exp < Date.now() / 1000) {
+      const decoded = jwtDecode<JwtPayload>(token);
+      if (decoded?.exp && decoded?.exp < Date.now() / 1000) {
         return true;
       } 
       
@@ -35,8 +38,9 @@ class AuthService {
   }
 
   getToken() {
+    const loggedUser = localStorage.getItem('id_token');
     // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token');
+    return loggedUser;
   }
 
   login(idToken: string) {

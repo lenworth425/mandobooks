@@ -6,14 +6,14 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../utils/mutation';
+import { LOGIN_USER } from '../utils/mutation';
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
 const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
   const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [addUser] = useMutation(ADD_USER);
+  const [loginUser] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -31,7 +31,7 @@ const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
     }
 
     try {
-      const {data} = await addUser({ variables: { ...userFormData } });
+      const {data} = await loginUser({ variables: { ...userFormData } });
 
       if (!data.addUser) {
         throw new Error('something went wrong!');

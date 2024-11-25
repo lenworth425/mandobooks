@@ -9,10 +9,11 @@ import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutation';
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
-const LoginForm = ({}: { handleModalClose: () => void }) => {
+const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
   const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [addUser] = useMutation(ADD_USER);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -30,14 +31,15 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
-      const response = await useMutation(ADD_USER);
+      const {data} = await addUser({ variables: { ...userFormData } });
 
-      if (!response.ok) {
+      if (!data.addUser) {
         throw new Error('something went wrong!');
       }
 
-      const { token } = await response.json();
+      const { token } = data.addUser;
       Auth.login(token);
+      handleModalClose();
     } catch (err) {
       console.error(err);
       setShowAlert(true);

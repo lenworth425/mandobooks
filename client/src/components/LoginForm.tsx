@@ -33,11 +33,11 @@ const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
     try {
       const {data} = await loginUser({ variables: { ...userFormData } });
 
-      if (!data.addUser) {
-        throw new Error('something went wrong!');
-      }
+      // if (!data.addUser) {
+      //   throw new Error('something went wrong!');
+      // }
 
-      const { token } = data.addUser;
+      const { token } = data;
       Auth.login(token);
       handleModalClose();
     } catch (err) {

@@ -41,16 +41,11 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
             email: userFormData.email, 
             password: userFormData.password 
           } 
-        },
-        onError: (error) => {
-          console.error('Full GraphQL Error:', error);
-          console.error('GraphQL Errors:', error.graphQLErrors);
-          console.error('Network Error:', error.networkError);
-        } 
+        }
       });
   
-      if (data && data.signup) {
-        const { token } = data.signup;
+      if (data) {
+        const { token } = data;
         Auth.login(token);
         handleModalClose();
       }

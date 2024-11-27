@@ -73,7 +73,7 @@ export const resolvers = {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $addToSet: { savedBooks: input } },
-                    { new: true }
+                    { new: true, populate: 'savedBooks' }
                 );
 
                 console.log(updatedUser);
@@ -87,7 +87,7 @@ export const resolvers = {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $pull: { savedBooks: { bookId: input.bookId } } },
-                    { new: true }
+                    { new: true, populate: 'savedBooks' }
                 );
 
                 return updatedUser;

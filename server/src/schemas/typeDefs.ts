@@ -13,7 +13,7 @@ const typeDefs = `
     description: String!
     bookId: String!
     image: String!
-    link: String!
+    link: String
     }
 
   type Mutation {
@@ -37,7 +37,7 @@ const typeDefs = `
     description: String!
     title: String!
     image: String!
-    link: String!
+    link: String
     }
     
   

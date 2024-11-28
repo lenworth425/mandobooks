@@ -28,7 +28,7 @@ const startApolloServer = async () => {
     }
   ));
 
-  app.use(express.static('../client/dist'));
+  app.use(express.static('../../client/dist'));
 
 
   app.use(routes);

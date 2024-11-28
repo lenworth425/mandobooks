@@ -1,6 +1,9 @@
 import express from 'express';
 import db from './config/connection.js';
 import routes from './routes/index.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 import {ApolloServer} from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
@@ -11,6 +14,9 @@ const server = new ApolloServer({
   typeDefs,
   resolvers
 });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const startApolloServer = async () => {
   await server.start();
@@ -28,7 +34,7 @@ const startApolloServer = async () => {
     }
   ));
 
-  app.use(express.static('../../client/dist'));
+  app.use(express.static(path.join(__dirname,'../../client/dist')));
 
 
   app.use(routes);

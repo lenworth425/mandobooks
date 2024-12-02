@@ -26,9 +26,7 @@ interface AddBookArgs {
 }
 
 interface RemoveBookArgs {
-    input:{
-        bookId: string;
-    }
+   bookId: string;
 }
 
 export const resolvers = {
@@ -83,12 +81,12 @@ export const resolvers = {
             }
             throw new AuthenticationError('You need to be logged in!');
         },
-        removeBook: async (_parent: any, { input }: RemoveBookArgs, context: any) => {
+        removeBook: async (_parent: any, { bookId }: RemoveBookArgs, context: any) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: { bookId: input.bookId } } },
-                    { new: true, populate: 'savedBooks' }
+                    { $pull: { savedBooks: { bookId } } },
+                    { new: true }
                 );
 
                 return updatedUser;
